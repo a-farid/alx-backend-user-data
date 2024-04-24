@@ -31,7 +31,11 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add new user"""
-        new_user = User(email=hashed_password, hashed_password=hashed_password)
-        self._session.add(User)
-        self._session.commit()
+        try:
+            new_user = User(email=hashed_password, hashed_password=hashed_password)
+            self._session.add(User)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            new_user=None
         return new_user
